@@ -398,13 +398,14 @@ _G.m_timer = event.timer(60, function()
   end
 end, math.huge)
 -----------------------------------
-tmpData.tooltip = add_sp(add_sp(loc.label, W-26)..loc.amount, W-16)..' '..loc.price
-tmpData.ttp_len = utf8.len(tmpData.tooltip)
-modem.setStrength(10)
+
 
 
 
 while true do
+    tmpData.tooltip = add_sp(add_sp(loc.label, W-26)..loc.amount, W-16)..' '..loc.price
+tmpData.ttp_len = utf8.len(tmpData.tooltip)
+modem.setStrength(10)
     wMain:run()
     load_db()
     local signal = {computer.pullSignal(0)}
@@ -423,6 +424,10 @@ while true do
     
         
     elseif signal[1] == "player_off" then
-        
+    logout()
+    wMain:run()
+    wBuyList.close()
+    wBuy.close()
+    wMain:draw()
     end
 end
