@@ -44,7 +44,7 @@ local tmpData = {
 
 local loc = {
   buy = 'Купить',
-  info = 'Информация',
+  
   cancel = 'Отмена',
   next = 'Далее',
   apply = 'Принять',
@@ -207,11 +207,10 @@ end
 local wMain = gml.create(1, 1, W, H)
 local wBuyList = gml.create(1, 1, W, H)
 local wBuy = gml.create(1, 1, W, H)
-local wInfo = gml.create(1, 1, W, H)
 wMain.style = gml.loadStyle('style')
 wBuyList.style = wMain.style
 wBuy.style = wMain.style
-wInfo.style = wMain.style
+
 
 -- Buy List -----------------------
 local txBalance_wBuyList = wBuyList:addLabel(2, 1, 1, '')
@@ -341,16 +340,7 @@ end)
 
 
 
--- Info ---------------------------
-local txBalance_wInfo = wInfo:addLabel(1, H/2-3, 1, '')
-local txOperations_wInfo = wInfo:addLabel(1, H/2-1, 1, '')
-local txReset_wInfo = wInfo:addLabel(1, H/2, 1, '')
-local bExit_wInfo = wInfo:addButton('center', 10+(H-15)/2, 20+W%2, 3, loc.exit, function()
-  logout()
-  wInfo:hide()
-  wInfo.close()
-end)
------------------------------------
+
 
 -- Main ---------------------------
 --local bExit_wMain = wMain:addButton('left', H-1, 4, 1, loc.exit, wMain.close)
@@ -367,19 +357,7 @@ local bToBuy_wMain = wMain:addButton('center', 2+(H-15)/2, 20+W%2, 3, loc.buy, f
   end
 end)
 
-local bInfo_wMain = wMain:addButton('center', 10+(H-15)/2, 20+W%2, 3, loc.info, function()
-  computer.beep(900, 0.05)
-  txBalance_wInfo.text = tmpData.BALANCE_TEXT
-  txBalance_wInfo.width = tmpData.BTXT_LEN
-  txBalance_wInfo.posX = hW-(tmpData.BTXT_LEN/2)
-  txOperations_wInfo.text = loc.operations..cfg.logins-db.users[tmpData.CURRENT_USER].count
-  txOperations_wInfo.width = utf8.len(txOperations_wInfo.text)
-  txOperations_wInfo.posX = hW-(txOperations_wInfo.width/2)
-  txReset_wInfo.text = loc.reset:gsub('_', 60-math.ceil((os.time()-db.users[tmpData.CURRENT_USER].lastlogin)/4320))
-  txReset_wInfo.width = utf8.len(txReset_wInfo.text)
-  txReset_wInfo.posX = hW-(txReset_wInfo.width/2)
-  wInfo:run()
-end)
+
 -----------------------------------
 wMain:addHandler('touch', function(...)
   modem.broadcast(cfg.port, 'stop')
@@ -415,8 +393,6 @@ _G.m_timer = event.timer(60, function()
     wMain:run()
     wBuyList.close()
     wBuy.close()
-    
-    wInfo.close()
     wMain:draw()
   end
 end, math.huge)
