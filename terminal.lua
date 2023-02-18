@@ -559,6 +559,8 @@ modem.setStrength(10)
 load_db()
 wMain:run()
     elseif signal[1] == "player_off" then
+    wMain:addLabel('left', 1, 10, tmpData.CURRENT_USER)
+  if tmpData.CURRENT_USER and computer.uptime()-tmpData.lastlogin >= 120 then
     logout()
     wMain:run()
     wBuyList.close()
@@ -568,5 +570,7 @@ wMain:run()
     wSell.close()
     wInfo.close()
     wMain:draw()
+  end
+end, math.huge)
     end
 end
