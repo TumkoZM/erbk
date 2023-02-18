@@ -557,10 +557,47 @@ while true do
 tmpData.ttp_len = utf8.len(tmpData.tooltip)
 modem.setStrength(10)
 load_db()
-   -- wSellLoad:run()
-wBuyList:run()
---wMain:run()
-   -- wSellLoad:run()
+   modem.broadcast(cfg.port, 'stop')
+  local e = {...}
+  tmpData.CURRENT_USER = e[6]
+  tmpData.lastlogin = computer.uptime()
+  computer.addUser(tmpData.CURRENT_USER)
+  modem.broadcast(cfg.port, 'start')
+  if not db.users[tmpData.CURRENT_USER] then
+    db.users[tmpData.CURRENT_USER] = {
+      balance = 0,
+      count = 0,
+      lastlogin = os.time()
+    }
+  end
+  if not db.users[cfg.operator] then
+    db.users[cfg.operator] = {
+      balance = 0,
+      count = 0,
+      lastlogin = os.time()
+    }
+  end
+  if os.time()-db.users[tmpData.CURRENT_USER].lastlogin > 259200 then
+    db.users[tmpData.CURRENT_USER].lastlogin = os.time()
+    db.users[tmpData.CURRENT_USER].count = 0
+  end
+  update_txBalance()
+end)
+wMain:addLabel('left', 1, 10, tmpData.CURRENT_USER)
+_G.m_timer = event.timer(60, function()
+  if tmpData.CURRENT_USER and computer.uptime()-tmpData.lastlogin >= 120 then
+    logout()
+    wMain:run()
+    wBuyList.close()
+    wBuy.close()
+    wSellLoad.close()
+    wSellList.close()
+    wSell.close()
+    wInfo.close()
+    wMain:draw()
+  end
+end, math.huge)
+
     elseif signal[1] == "player_off" then
     
     logout()
