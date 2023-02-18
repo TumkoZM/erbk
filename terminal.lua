@@ -571,7 +571,7 @@ wMain:run()
     
   
     
-    , function())
+    
 
     end
 end
