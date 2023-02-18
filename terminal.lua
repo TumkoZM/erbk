@@ -559,7 +559,7 @@ modem.setStrength(10)
 load_db()
 wMain:run()
     elseif signal[1] == "player_off" then
-    wMain:addLabel('left', 1, 10, tmpData.CURRENT_USER)
+    
   
     
     wMain:addHandler('touch',loc.exit,wMain.close, function())
