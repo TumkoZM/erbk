@@ -434,6 +434,7 @@ while true do
     txAmount_wBuy.width = utf8.len(txAmount_wBuy.text)
     txAmount_wBuy.posX = hW-utf_find(txAmount_wBuy.text, ':')
     wBuy:run()
+    end
         
     elseif signal[1] == "player_off" then
         
