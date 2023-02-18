@@ -401,19 +401,41 @@ end, math.huge)
 tmpData.tooltip = add_sp(add_sp(loc.label, W-26)..loc.amount, W-16)..' '..loc.price
 tmpData.ttp_len = utf8.len(tmpData.tooltip)
 modem.setStrength(10)
-load_db()
-wMain:run()
+
+
 
 while true do
+    wMain:run()
+    load_db()
     local signal = {computer.pullSignal(0)}
+    
     if signal[1] == "player_on" then
         
-    netScan()
-    lItems_wBuyList:updateList(tmpData.uiStorage)
-    wBuyList:run()
+    tmpData.selected = tmpData.uiStorage[0][lItems_wBuyList:getSelected()]
+  if tmpData.selected then
+    tmpData.price_selected = db.items[tmpData.selected].cost
+    tmpData.amount_selected = db.items[tmpData.selected].i-db.items[tmpData.selected].o
+    txBalance_wBuy.text = tmpData.BALANCE_TEXT
+    txBalance_wBuy.width = tmpData.BTXT_LEN
+    txBalance_wBuy.posX = hW-utf_find(tmpData.BALANCE_TEXT, ':')
+    txInStock_wBuy.text = loc.inStock..tmpData.amount_selected
+    txInStock_wBuy.width = utf8.len(txInStock_wBuy.text)
+    txInStock_wBuy.posX = hW-utf_find(txInStock_wBuy.text, ':')
+    txItemName_wBuy.text = loc.label..': '..db.items[tmpData.selected].label
+    txItemName_wBuy.width = utf8.len(txItemName_wBuy.text)
+    txItemName_wBuy.posX = hW-utf_find(txItemName_wBuy.text, ':')
+    txItemPrice_wBuy.text = loc.price..': '..tmpData.price_selected
+    txItemPrice_wBuy.width = utf8.len(txItemPrice_wBuy.text)
+    txItemPrice_wBuy.posX = hW-utf_find(txItemPrice_wBuy.text, ':')
+    txTotalSum_wBuy.text = loc.total..': 0'
+    txTotalSum_wBuy.width = utf8.len(txTotalSum_wBuy.text)
+    txTotalSum_wBuy.posX = hW-utf_find(txTotalSum_wBuy.text, ':')
+    txAmount_wBuy.text = loc.amount..': 0'
+    txAmount_wBuy.width = utf8.len(txAmount_wBuy.text)
+    txAmount_wBuy.posX = hW-utf_find(txAmount_wBuy.text, ':')
+    wBuy:run()
         
     elseif signal[1] == "player_off" then
         
-       
     end
 end
