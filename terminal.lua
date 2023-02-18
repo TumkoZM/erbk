@@ -44,8 +44,6 @@ local tmpData = {
 
 local loc = {
   buy = 'Купить',
-  sell = 'Продать',
-  sell_all = 'Продать всё',
   info = 'Информация',
   cancel = 'Отмена',
   next = 'Далее',
@@ -56,9 +54,6 @@ local loc = {
   inStock = 'В наличии: ',
   total = 'Сумма',
   price = 'Цена',
-  sell_items = 'Продать предметы?',
-  sell_amount = 'Количество: ',
-  sell_profit = 'На сумму: $_ (комиссия ~%)',
   operations = 'Доступно операций: ',
   reset = 'Сброс через _ минут',
   drop = 'Брось предметы для продажи перед роботом'
@@ -154,33 +149,7 @@ local function buy(item, amount)
   computer.beep(440, 0.05)
 end
 
-local function sell()
-  for item, amount in pairs(tmpData.selected) do
-    local result = 0
-    for slot = 1, i_c.getInventorySize(cfg.ic_side) do
-      local fitem = i_c.getStackInSlot(cfg.ic_side, slot)
-      if fitem and item == fitem.name..'|'..fitem.damage then
-        local size
-        if fitem.size < amount then
-          size = interface.pullItem(cfg.mei_side, slot, fitem.qty)
-        elseif fitem.size >= amount then
-          size = interface.pullItem(cfg.mei_side, slot, amount)
-        end
-        amount, result = amount - size, result + size
-        if amount == 0 then
-          break
-        end
-      end
-    end
-    db.items[item].i = db.items[item].i + result
-    log_add(os.time()..'@'..tmpData.CURRENT_USER..'@'..db.users[tmpData.CURRENT_USER].balance..'@>@'..item..'@'..result..'@'..db.items[item].i-db.items[item].o..'@'..db.items[item].cost)
-    updateCost(item)
-  end
-  db.users[tmpData.CURRENT_USER].balance = db.users[tmpData.CURRENT_USER].balance+tmpData.price_selected
-  db.users[cfg.operator].balance = db.users[cfg.operator].balance + tmpData.fee
-  logout()
-  computer.beep(440, 0.05)
-end
+
 
 local function netScan()
   tmpData.uiStorage = {[0]={}}
@@ -238,16 +207,10 @@ end
 local wMain = gml.create(1, 1, W, H)
 local wBuyList = gml.create(1, 1, W, H)
 local wBuy = gml.create(1, 1, W, H)
-local wSellLoad = gml.create(1, 1, W, H)
-local wSellList = gml.create(1, 1, W, H)
-local wSell = gml.create(1, 1, W, H)
 local wInfo = gml.create(1, 1, W, H)
 wMain.style = gml.loadStyle('style')
 wBuyList.style = wMain.style
 wBuy.style = wMain.style
-wSellLoad.style = wMain.style
-wSellList.style = wMain.style
-wSell.style = wMain.style
 wInfo.style = wMain.style
 
 -- Buy List -----------------------
@@ -374,84 +337,9 @@ local bNext_wBuyList = wBuyList:addButton('right', H-2, 13, 1, loc.next, functio
 end)
 -----------------------------------
 
--- Sell ---------------------------
-local txToSell = wSell:addLabel('center', H/3, utf8.len(loc.sell_items), loc.sell_items)
-local txAmount_wSell = wSell:addLabel('center', H/3+1, 1, '')
-local txProfit_wSell = wSell:addLabel('center', H/3+2, 1, '')
-local bCancel_wSell = wSell:addButton('left', H-2, 20, 3, loc.cancel, function()
-  logout()
-  wSell.close()
-end)
-local bNext_wSell = wSell:addButton('right', H-2, 20, 3, loc.apply, function()
-  if tmpData.selected then
-    sell()
-    wSell.close()
-  end
-end)
------------------------------------
 
--- Sell List ----------------------
-local txBalance_wSellList = wSellList:addLabel('center', 1, 1, '')
-local txTooltip_wSellList = wSellList:addLabel(2, 2, 1, '')
-local lItems_wSellList = wSellList:addListBox('center', 3, W-4, H-6, {})
-local bCancel_wSellList = wSellList:addButton('left', H-2, 13, 1, loc.cancel, function()
-  logout()
-  wSellList:hide()
-  wSellList.close()
-end)
-local function sell_prepare(all)
-  if #lItems_wSellList.list > 0 then
-    local amount, item = 0
-    tmpData.price_selected = 0
-    if all then
-      tmpData.selected = tmpData.BUFFER
-      for i = 1, #lItems_wSellList.list do
-        item = tmpData.uiBuffer[0][lItems_wSellList.list[i]]
-        tmpData.price_selected = tmpData.price_selected + (db.items[item].cost*tmpData.BUFFER[item])
-        amount = amount + tmpData.BUFFER[item]
-      end
-    else
-      tmpData.selected = tmpData.uiBuffer[0][lItems_wSellList:getSelected()]
-      if tmpData.selected then
-        amount = tmpData.BUFFER[tmpData.selected]
-        tmpData.price_selected = db.items[tmpData.selected].cost*amount
-        tmpData.selected = {[tmpData.selected] = amount}
-      end
-    end
-    tmpData.fee = math.ceil(tmpData.price_selected*cfg.fee)
-    tmpData.price_selected = tmpData.price_selected-tmpData.fee
-    txAmount_wSell.text = loc.amount..': '..amount
-    txAmount_wSell.width = utf8.len(txAmount_wSell.text)
-    txAmount_wSell.posX = hW-(txAmount_wSell.width/2)
-    txProfit_wSell.text = loc.sell_profit:gsub('_', tmpData.price_selected):gsub('~', cfg.fee*100)
-    txProfit_wSell.width = utf8.len(txProfit_wSell.text)
-    txProfit_wSell.posX = hW-(txProfit_wSell.width/2)
-    wSell:run()
-    wSellList.close()
-  end
-end
-local bNext1_wSellList = wSellList:addButton('center', H-2, 13, 1, loc.sell_all, function()
-  sell_prepare(true)
-end)
-local bNext2_wSellList = wSellList:addButton('right', H-2, 13, 1, loc.sell, function()
-  sell_prepare()
-end)
------------------------------------
 
--- Sell Load ----------------------
-local txSellInfo = wSellLoad:addLabel('center', H/3, utf8.len(loc.drop), loc.drop)
-local bCancel_wSellLoad = wSellLoad:addButton('left', H-2, 20, 3, loc.cancel, function()
-  logout()
-  wSellLoad.close()
-end)
-local bNext_wSellLoad = wSellLoad:addButton('right', H-2, 20, 3, loc.next, function()
-  modem.broadcast(cfg.port, 'stop')
-  bufferScan()
-  lItems_wSellList:updateList(tmpData.uiBuffer)
-  wSellList:run()
-  wSellLoad.close()
-end)
------------------------------------
+
 
 -- Info ---------------------------
 local txBalance_wInfo = wInfo:addLabel(1, H/2-3, 1, '')
@@ -478,18 +366,7 @@ local bToBuy_wMain = wMain:addButton('center', 2+(H-15)/2, 20+W%2, 3, loc.buy, f
     wBuyList:run()
   end
 end)
-local bToSell_wMain = wMain:addButton('center', 6+(H-15)/2, 20+W%2, 3, loc.sell, function()
-  if db.users[tmpData.CURRENT_USER].count < cfg.logins then
-    modem.broadcast(cfg.port, 'import')
-    computer.beep(800, 0.05)
-    txTooltip_wSellList.text = tmpData.tooltip
-    txTooltip_wSellList.width = tmpData.ttp_len
-    txBalance_wSellList.text = tmpData.BALANCE_TEXT
-    txBalance_wSellList.width = tmpData.BTXT_LEN
-    txBalance_wSellList.posX = hW-(tmpData.BTXT_LEN/2)
-    wSellLoad:run()
-  end
-end)
+
 local bInfo_wMain = wMain:addButton('center', 10+(H-15)/2, 20+W%2, 3, loc.info, function()
   computer.beep(900, 0.05)
   txBalance_wInfo.text = tmpData.BALANCE_TEXT
@@ -538,9 +415,7 @@ _G.m_timer = event.timer(60, function()
     wMain:run()
     wBuyList.close()
     wBuy.close()
-    wSellLoad.close()
-    wSellList.close()
-    wSell.close()
+    
     wInfo.close()
     wMain:draw()
   end
