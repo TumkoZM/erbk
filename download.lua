@@ -1,4 +1,4 @@
-local REPOSITOTY = "https://raw.githubusercontent.com/TumkoZM/errbk/main"
+local REPOSITOTY = "https://raw.githubusercontent.com/TumkoZM/erbk/main"
 
 local shell = require("shell")
 shell.execute("wget -f " .. REPOSITOTY .. "/terminal.lua /home/terminal.lua")
