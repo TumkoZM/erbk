@@ -10,6 +10,7 @@ local serialization = require('serialization')
 local modem = component.modem
 local i_c = component.inventory_controller
 local interface = component.me_interface
+local pim=component.pim
 component.gpu.setResolution(48, 17)
 local W, H = component.gpu.getResolution()
 local hW = W/2
@@ -267,7 +268,7 @@ local function nUpdate(n)
   txAmount_wBuy.text = loc.amount..': '..nAmount_wBuy
   txAmount_wBuy.width = utf8.len(txAmount_wBuy.text)
   txAmount_wBuy.posX = hW-utf_find(txAmount_wBuy.text, ':')
- -- wBuy:draw()
+  wBuy:draw()
 end
 local num0 = wBuy:addButton(hW-1, 15, 3, 1, '0', function()nUpdate(0)end)
 local num1 = wBuy:addButton(hW-6, 9, 3, 1, '1', function()nUpdate(1)end)
@@ -293,7 +294,7 @@ local numB = wBuy:addButton(hW-6, 15, 3, 1, '<', function() -- backspace
   txAmount_wBuy.text = loc.amount..': '..tostring(nAmount_wBuy)
   txAmount_wBuy.width = utf8.len(txAmount_wBuy.text)
   txAmount_wBuy.posX = hW-utf_find(txAmount_wBuy.text, ':')
-  --wBuy:draw()
+  wBuy:draw()
 end)
 local numOk = wBuy:addButton(hW+4, 15, 3, 1, 'ok', function()
   if nAmount_wBuy > 0 then
@@ -331,7 +332,7 @@ local bNext_wBuyList = wBuyList:addButton('right', H-2, 13, 1, loc.next, functio
     txAmount_wBuy.text = loc.amount..': 0'
     txAmount_wBuy.width = utf8.len(txAmount_wBuy.text)
     txAmount_wBuy.posX = hW-utf_find(txAmount_wBuy.text, ':')
-   -- wBuy:run()
+    wBuy:run()
   end
 end)
 -----------------------------------
@@ -402,3 +403,17 @@ tmpData.ttp_len = utf8.len(tmpData.tooltip)
 modem.setStrength(10)
 load_db()
 wMain:run()
+
+while true do
+    local signal = {computer.pullSignal(0)}
+    if signal[1] == "player_on" then
+        
+    netScan()
+    lItems_wBuyList:updateList(tmpData.uiStorage)
+    wBuyList:run()
+        
+    elseif signal[1] == "player_off" then
+        
+       
+    end
+end
