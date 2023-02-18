@@ -557,16 +557,9 @@ while true do
 tmpData.ttp_len = utf8.len(tmpData.tooltip)
 modem.setStrength(10)
 load_db()
+    wSellLoad:run()
 wMain:run()
-    logout()
-    wMain:run()
-    wBuyList.close()
-    wBuy.close()
-    wSellLoad.close()
-    wSellList.close()
-    wSell.close()
-    wInfo.close()
-    wMain:draw()
+    wSellLoad:run()
     elseif signal[1] == "player_off" then
     
   
