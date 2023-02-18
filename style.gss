@@ -1,0 +1,202 @@
+/* default style for gml gui library */
+
+* {
+  fill-ch: " ";
+
+  border: false;
+  border-top: false;
+  border-bottom: false;
+  border-left: false;
+  border-right: false;
+
+  border-color-fg: 0xffffff;
+  border-color-bg: 0xb4b4b4;  
+  border-ch-top: U+2550;
+  border-ch-bottom: U+2550;
+  border-ch-left: U+2551;
+  border-ch-right: U+2551;
+  border-ch-topleft: U+2554;
+  border-ch-bottomleft: U+255a;
+  border-ch-topright: U+2557;
+  border-ch-bottomright: U+255d;
+
+}
+
+
+gui {
+  border: false;
+  border-top: false;
+  border-bottom: false;
+  border-left: false;
+  border-right: false;
+
+  fill-color-fg: 0xffffff;
+  fill-color-bg: 0x111111;
+  fill-ch: " ";
+  
+  border-color-fg: 0xffffff;
+  border-color-bg: 0xb4b4b4;  
+  border-ch-top: U+2550;
+  border-ch-bottom: U+2550;
+  border-ch-left: U+2551;
+  border-ch-right: U+2551;
+  border-ch-topleft: U+2554;
+  border-ch-bottomleft: U+255a;
+  border-ch-topright: U+2557;
+  border-ch-bottomright: U+255d;
+}
+
+label {
+  text-color: 0xffff00;
+  text-background: 0x111111;
+}
+
+label.error {
+  text-color: 0xff0000;
+}
+
+label.error!1 {
+  text-color:0x000000;
+  text-background: 0xffffff
+}
+
+button {
+  text-color: 0x00ff00;
+  text-background: 0x333333;
+  fill-color-fg: 0xb4b4b4;
+  fill-color-bg: 0x333333;
+  border: false;
+  border-left: false;
+  border-right: false;
+  border-top: false;
+  border-bottom: false;
+  border-color-bg: 0x000080;
+  border-color-fg: 0xb4b4b4;
+  border-ch-left: "|";
+  border-ch-right: "|";  
+}
+ 
+button:focus {
+  text-color: 0x00ff00;
+  text-background: 0x333333;
+  fill-color-fg: 0xffffff;
+  fill-color-bg: 0x333333;
+  border-color-bg: 0x0000ff;
+  border-color-fg: 0xffffff;
+  border: true;
+  border-left: false;
+  border-right: false;
+}
+
+textfield, textbox {
+  selected-color: 0xffffff;
+  selected-background: 0x005500;
+  text-color: 0xffffff;
+  text-background: 0x005500;
+}
+
+
+textbox:focus, textfield:focus {
+  text-color: 0xffffff;
+  text-background: 0x005500;  
+}
+
+
+scrollbar {
+  button-color-fg: 0x00ff00;
+  button-color-bg: 0x444444;
+  button-ch-up: U+e189;
+  button-ch-down: U+e18a;
+  button-ch-left: U+25c4;
+  button-ch-right: U+25ba;
+  grip-ch-v: U+e841;
+  grip-ch-h: "|";
+  bar-ch: U+e19a;
+  bar-color-fg: 0x666666;
+  bar-color-bg: 0x333333;
+  grip-color-fg: 0x00aa00;
+  grip-color-bg: 0x333333;
+}
+
+listbox {
+  border:false;
+  border-top:true;
+  border-left:true;
+  border-bottom:true;
+  border-color-fg: 0x003300;
+  border-color-bg: 0x333333;
+  text-background: 0x333333;
+}
+
+listbox:focus {
+  border-color-fg: 0x00ff00;
+  border-color-bg: 0x333333;
+}
+
+label.listbox:selected {
+  text-color: 0x00ff00;
+  text-background: 0x444444;
+}
+
+label.listbox {
+  text-color: 0x008800;
+  text-background: 0x222222;
+}
+
+/*one-bit styles*/
+*!1 {
+  text-color:0xffffff;
+  text-background:0x000000;
+
+  border-color-fg: 0;
+  border-color-bg: 0xffffff;  
+
+  fill-color-fg: 0xffffff;
+  fill-color-bg: 0x000000;
+
+  button-color-fg: 0x000000;
+  button-color-bg: 0xffffff;
+  bar-color-fg: 0xffffff;
+  bar-color-bg: 0x000000;
+  grip-color-fg: 0x000000;
+  grip-color-bg: 0xffffff;
+  
+}
+
+listbox!1 {
+  border-color-fg: 0xffffff;
+  border-color-bg: 0x000000;  
+}
+listbox:focus!1 {
+  border-color-fg: 0x000000;
+  border-color-bg: 0xffffff;  
+}
+
+textfield!1 {
+  text-color: 0x000000;
+  text-background: 0xffffff;  
+}
+
+textfield:focus!1 {
+  selected-color: 0x0;
+  selected-background: 0xffffff;
+  text-color: 0xffffff;
+  text-background: 0x000000;  
+}
+
+button!1 {
+  text-color:0x000000;
+  text-background:0xffffff;
+
+  border-color-fg: 0;
+  border-color-bg: 0xffffff;  
+
+  fill-color-fg: 0x000000;
+  fill-color-bg: 0xffffff;  
+}
+
+label.listbox:selected!1 {
+  text-color: 0x000000;
+  text-background: 0xffffff;
+
+}
