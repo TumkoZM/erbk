@@ -466,7 +466,7 @@ end)
 -----------------------------------
 
 -- Main ---------------------------
-local bExit_wMain = wMain:addButton('left', H-1, 4, 1, loc.exit, wMain.close)
+--local bExit_wMain = wMain:addButton('left', H-1, 4, 1, loc.exit, wMain.close)
 local bToBuy_wMain = wMain:addButton('center', 2+(H-15)/2, 20+W%2, 3, loc.buy, function()
   if db.users[tmpData.CURRENT_USER].count < cfg.logins then
     computer.beep(1000, 0.05)
