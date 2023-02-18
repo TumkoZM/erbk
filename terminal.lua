@@ -466,7 +466,7 @@ end)
 -----------------------------------
 
 -- Main ---------------------------
---local bExit_wMain = wMain:addButton('left', H-1, 4, 1, loc.exit, wMain.close)
+local bExit_wMain = wMain:addButton('left', H-1, 4, 1, loc.exit, wMain.close)
 local bToBuy_wMain = wMain:addButton('center', 2+(H-15)/2, 20+W%2, 3, loc.buy, function()
   if db.users[tmpData.CURRENT_USER].count < cfg.logins then
     computer.beep(1000, 0.05)
@@ -561,16 +561,8 @@ wMain:run()
     elseif signal[1] == "player_off" then
     wMain:addLabel('left', 1, 10, tmpData.CURRENT_USER)
   
-    logout()
-    wMain:run()
-    wBuyList.close()
-    wBuy.close()
-    wSellLoad.close()
-    wSellList.close()
-    wSell.close()
-    wInfo.close()
-    wMain:draw()
-  
+    
+    wMain:addHandler('touch',loc.exit,wMain.close, function())
 
     end
 end
